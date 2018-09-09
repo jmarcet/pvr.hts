@@ -23,6 +23,7 @@
 
 #include "Entity.h"
 #include <map>
+#include <vector>
 #include <cstdint>
 #include <string>
 
@@ -52,7 +53,8 @@ namespace tvheadend
         m_season(0),
         m_episode(0),
         m_part(0),
-        m_recordingId(0)
+        m_recordingId(0),
+        m_year(0)
       {
       }
 
@@ -76,6 +78,11 @@ namespace tvheadend
                m_summary == other.m_summary &&
                m_image == other.m_image &&
                m_recordingId == other.m_recordingId;
+               m_year == other.m_year &&
+               m_writers == other.m_writers &&
+               m_directors == other.m_directors &&
+               m_cast == other.m_cast &&
+               m_categories == other.m_categories;
       }
 
       bool operator!=(const Event &other) const
@@ -135,6 +142,21 @@ namespace tvheadend
       uint32_t GetRecordingId() const { return m_recordingId; }
       void SetRecordingId(uint32_t recordingId) { m_recordingId = recordingId; }
 
+      uint32_t GetYear() const { return m_year; }
+      void SetYear(uint32_t year) { m_year = year; }
+
+      const std::string& GetWriters() const { return m_writers; }
+      void SetWriters(const std::vector<std::string> &writers);
+
+      const std::string& GetDirectors() const { return m_directors; }
+      void SetDirectors(const std::vector<std::string> &directors);
+
+      const std::string& GetCast() const { return m_cast; }
+      void SetCast(const std::vector<std::string> &cast);
+
+      const std::string& GetCategories() const { return m_categories; }
+      void SetCategories(const std::vector<std::string> &categories);
+
     private:
       uint32_t    m_next;
       uint32_t    m_channel;
@@ -153,6 +175,11 @@ namespace tvheadend
       std::string m_summary;
       std::string m_image;
       uint32_t    m_recordingId;
+      uint32_t    m_year;
+      std::string m_writers;
+      std::string m_directors;
+      std::string m_cast;
+      std::string m_categories;
     };
   }
 }
