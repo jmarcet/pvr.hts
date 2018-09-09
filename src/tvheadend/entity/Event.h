@@ -73,6 +73,7 @@ namespace tvheadend
                m_episode == other.m_episode &&
                m_part == other.m_part &&
                m_title == other.m_title &&
+               m_originalTitle == other.m_originalTitle &&
                m_subtitle == other.m_subtitle &&
                m_desc == other.m_desc &&
                m_summary == other.m_summary &&
@@ -125,6 +126,9 @@ namespace tvheadend
 
       const std::string& GetTitle() const { return m_title; }
       void SetTitle(const std::string &title) { m_title = title; }
+      
+      const std::string& GetOriginalTitle() const { return m_originalTitle; }
+      void SetOriginalTitle(const std::string &originalTitle) { m_originalTitle = originalTitle; }
 
       const std::string& GetSubtitle() const { return m_subtitle; }
       void SetSubtitle(const std::string &subtitle) { m_subtitle = subtitle; }
@@ -170,6 +174,7 @@ namespace tvheadend
       uint32_t    m_episode;
       uint32_t    m_part;
       std::string m_title;
+      std::string m_originalTitle;
       std::string m_subtitle; /* episode name */
       std::string m_desc;
       std::string m_summary;
