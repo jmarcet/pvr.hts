@@ -105,6 +105,7 @@ namespace tvheadend
                m_playCount == other.m_playCount &&
                m_playPosition == other.m_playPosition &&
                m_contentType == other.m_contentType &&
+               m_image == other.m_image &&
                m_season == other.m_season &&
                m_episode == other.m_episode &&
                m_part == other.m_part;
@@ -226,10 +227,12 @@ namespace tvheadend
 
       void SetContentType(uint32_t content) { m_contentType = content; }
       uint32_t GetContentType() const { return m_contentType; }
-      // tvh returns only the major DVB category for recordings in the
-      // bottom four bits and no sub-category
-      uint32_t GetGenreType() const { return m_contentType * 0x10; }
-      uint32_t GetGenreSubType() const { return 0; }
+
+      uint32_t GetGenreType() const { return m_contentType & 0xF0; }
+      uint32_t GetGenreSubType() const { return m_contentType & 0x0F; }
+
+      const std::string& GetImage() const { return m_image; }
+      void SetImage(const std::string &image) { m_image = image; }
 
       int32_t GetSeason() const { return m_season; }
       void SetSeason(int32_t season) { m_season = season; }
@@ -267,6 +270,7 @@ namespace tvheadend
       uint32_t         m_playCount;
       uint32_t         m_playPosition;
       uint32_t         m_contentType;
+      std::string      m_image;
       int32_t          m_season;
       int32_t          m_episode;
       uint32_t         m_part;
