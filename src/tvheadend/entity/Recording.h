@@ -226,10 +226,9 @@ namespace tvheadend
 
       void SetContentType(uint32_t content) { m_contentType = content; }
       uint32_t GetContentType() const { return m_contentType; }
-      // tvh returns only the major DVB category for recordings in the
-      // bottom four bits and no sub-category
-      uint32_t GetGenreType() const { return m_contentType * 0x10; }
-      uint32_t GetGenreSubType() const { return 0; }
+
+      uint32_t GetGenreType() const { return m_contentType & 0xF0; }
+      uint32_t GetGenreSubType() const { return m_contentType & 0x0F; }
 
       int32_t GetSeason() const { return m_season; }
       void SetSeason(int32_t season) { m_season = season; }

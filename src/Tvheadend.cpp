@@ -1102,8 +1102,8 @@ bool CTvheadend::CreateTimer ( const Recording &tvhTmr, PVR_TIMER &tmr )
   tmr.iEpgUid            = (tvhTmr.GetEventId() > 0) ? tvhTmr.GetEventId() : PVR_TIMER_NO_EPG_UID;
   tmr.iMarginStart       = static_cast<unsigned int>(tvhTmr.GetStartExtra());
   tmr.iMarginEnd         = static_cast<unsigned int>(tvhTmr.GetStopExtra());
-  tmr.iGenreType         = 0;                // not supported by tvh?
-  tmr.iGenreSubType      = 0;                // not supported by tvh?
+  tmr.iGenreType         = tvhTmr.GetGenreType();
+  tmr.iGenreSubType      = tvhTmr.GetGenreSubType();
   tmr.bFullTextEpgSearch = false;            // n/a for one-shot timers
   tmr.iParentClientIndex = tmr.iTimerType == TIMER_ONCE_CREATED_BY_TIMEREC
                             ? m_timeRecordings.GetTimerIntIdFromStringId(tvhTmr.GetTimerecId())
@@ -1412,7 +1412,7 @@ void CTvheadend::CreateEvent
   epg.endTime             = event.GetStop();
   epg.strPlotOutline      = event.GetSummary().c_str();
   epg.strPlot             = event.GetDesc().c_str();
-  epg.strOriginalTitle    = NULL; /* not supported by tvh */
+  epg.strOriginalTitle    = event.GetOriginalTitle().c_str();
   epg.strCast             = event.GetCast().c_str();
   epg.strDirector         = event.GetDirectors().c_str();
   epg.strWriter           = event.GetWriters().c_str();
@@ -2483,7 +2483,7 @@ void CTvheadend::ParseRecordingAddOrUpdate ( htsmsg_t *msg, bool bAdd )
     rec.SetDescription(str);
   else if ((str = htsmsg_get_str(msg, "summary")) != NULL)
     rec.SetDescription(str);
-  if (!htsmsg_get_u32(msg, "contentType", &contentType))
+  if (!htsmsg_get_u32(msg, "genre", &contentType))
     rec.SetContentType(contentType);
   if ((str = htsmsg_get_str(msg, "timerecId")) != NULL)
     rec.SetTimerecId(str);
@@ -2647,6 +2647,8 @@ bool CTvheadend::ParseEvent ( htsmsg_t *msg, bool bAdd, Event &evt )
     evt.SetNext(u32);
   if (!htsmsg_get_u32(msg, "contentType", &u32))
     evt.SetContent(u32);
+  if ((str = htsmsg_get_str(msg, "originalTitle")) != NULL)
+    evt.SetOriginalTitle(str);
   if (!htsmsg_get_u32(msg, "starRating", &u32))
     evt.SetStars(u32);
   if (!htsmsg_get_u32(msg, "ageRating", &u32))
