@@ -75,6 +75,11 @@ namespace tvheadend
                m_desc == other.m_desc &&
                m_summary == other.m_summary &&
                m_image == other.m_image &&
+               m_cast == other.m_cast &&
+               m_director == other.m_director &&
+               m_writer == other.m_writer &&
+               m_originalTitle == other.m_originalTitle &&
+               m_year == other.m_year &&
                m_recordingId == other.m_recordingId;
       }
 
@@ -131,6 +136,21 @@ namespace tvheadend
 
       const std::string& GetImage() const { return m_image; }
       void SetImage(const std::string &image) { m_image = image; }
+      
+      const std::string& GetCast() const { return m_cast; }
+      void SetCast(const std::string &cast) { m_cast = cast; }
+      
+      const std::string& GetDirector() const { return m_director; }
+      void SetDirector(const std::string &director) { m_director = director; }
+      
+      const std::string& GetWriter() const { return m_writer; }
+      void SetWriter(const std::string &writer) { m_writer = writer; }
+      
+      const std::string& GetOriginalTitle() const { return m_originalTitle; }
+      void SetOriginalTitle(const std::string &originalTitle) { m_originalTitle = originalTitle; }
+      
+      uint32_t GetYear() const { return m_year; }
+      void SetYear(uint32_t year) { m_year = year; }
 
       uint32_t GetRecordingId() const { return m_recordingId; }
       void SetRecordingId(uint32_t recordingId) { m_recordingId = recordingId; }
@@ -152,6 +172,11 @@ namespace tvheadend
       std::string m_desc;
       std::string m_summary;
       std::string m_image;
+      std::string m_cast;
+      std::string m_director;
+      std::string m_writer;
+      std::string m_originalTitle;
+      uint32_t    m_year;
       uint32_t    m_recordingId;
     };
   }

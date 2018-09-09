@@ -55,6 +55,7 @@ namespace tvheadend
       Recording() :
         m_enabled(0),
         m_channel(0),
+        m_genre(0),
         m_channelType(0),
         m_eventId(0),
         m_start(0),
@@ -72,6 +73,7 @@ namespace tvheadend
         return m_id == other.m_id &&
                m_enabled == other.m_enabled &&
                m_channel == other.m_channel &&
+               m_genre == other.m_genre &&
                m_channelType == other.m_channelType &&
                m_channelName == other.m_channelName &&
                m_eventId == other.m_eventId &&
@@ -82,6 +84,7 @@ namespace tvheadend
                m_title == other.m_title &&
                m_path == other.m_path &&
                m_description == other.m_description &&
+               m_image == other.m_image &&
                m_timerecId == other.m_timerecId &&
                m_autorecId == other.m_autorecId &&
                m_state == other.m_state &&
@@ -167,6 +170,12 @@ namespace tvheadend
 
       const std::string& GetDescription() const { return m_description; }
       void SetDescription(const std::string &description) { m_description = description; }
+      
+      const std::string& GetImage() const { return m_image; }
+      void SetImage(const std::string &image) { m_image = image; }
+      
+      uint32_t GetGenre() const { return m_genre; }
+      void SetGenre(uint32_t genre) { m_genre = genre; }
 
       const std::string& GetTimerecId() const { return m_timerecId; }
       void SetTimerecId(const std::string &autorecId) { m_timerecId = autorecId; }
@@ -190,6 +199,7 @@ namespace tvheadend
     private:
       uint32_t         m_enabled;
       uint32_t         m_channel;
+      uint32_t         m_genre;
       uint32_t         m_channelType;
       std::string      m_channelName;
       uint32_t         m_eventId;
@@ -201,6 +211,7 @@ namespace tvheadend
       std::string      m_subtitle;
       std::string      m_path;
       std::string      m_description;
+      std::string      m_image;
       std::string      m_timerecId;
       std::string      m_autorecId;
       PVR_TIMER_STATE  m_state;

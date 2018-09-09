@@ -33,6 +33,7 @@ const std::string Settings::DEFAULT_USERNAME            = "";
 const std::string Settings::DEFAULT_PASSWORD            = "";
 const int         Settings::DEFAULT_CONNECT_TIMEOUT     = 10000; // millisecs
 const int         Settings::DEFAULT_RESPONSE_TIMEOUT    = 5000;  // millisecs
+const std::string Settings::DEFAULT_MAC_ADDRESS         = "";
 const bool        Settings::DEFAULT_TRACE_DEBUG         = false;
 const bool        Settings::DEFAULT_ASYNC_EPG           = false;
 const bool        Settings::DEFAULT_PRETUNER_ENABLED    = false;
@@ -57,6 +58,9 @@ void Settings::ReadSettings()
   /* Note: Timeouts in settings UI are defined in seconds but we expect them to be in milliseconds. */
   SetConnectTimeout(ReadIntSetting("connect_timeout", DEFAULT_CONNECT_TIMEOUT / 1000) * 1000);
   SetResponseTimeout(ReadIntSetting("response_timeout", DEFAULT_RESPONSE_TIMEOUT / 1000) * 1000);
+  
+  /* Wake On LAN */
+  SetMACaddr(ReadStringSetting("mac_address", DEFAULT_MAC_ADDRESS));
 
   /* Debug */
   SetTraceDebug(ReadBoolSetting("trace_debug", DEFAULT_TRACE_DEBUG));
@@ -109,6 +113,9 @@ ADDON_STATUS Settings::SetSetting(const std::string &key, const void *value)
     else
      return ADDON_STATUS_NEED_RESTART;
   }
+  /* Wake On LAN */
+  else if (key == "mac_address")
+    return SetStringSetting(GetMACaddr(), value);
   /* Debug */
   else if (key == "trace_debug")
     return SetBoolSetting(GetTraceDebug(), value);

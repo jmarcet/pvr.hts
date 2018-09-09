@@ -42,6 +42,7 @@ namespace tvheadend {
     static const std::string DEFAULT_PASSWORD;
     static const int         DEFAULT_CONNECT_TIMEOUT;  // millisecs
     static const int         DEFAULT_RESPONSE_TIMEOUT; // millisecs
+    static const std::string DEFAULT_MAC_ADDRESS;
     static const bool        DEFAULT_TRACE_DEBUG;
     static const bool        DEFAULT_ASYNC_EPG;
     static const bool        DEFAULT_PRETUNER_ENABLED;
@@ -84,6 +85,7 @@ namespace tvheadend {
     std::string GetPassword() const { return m_strPassword; }
     int         GetConnectTimeout() const { return m_iConnectTimeout; }
     int         GetResponseTimeout() const { return m_iResponseTimeout; }
+    std::string GetMACaddr() const { return m_strMACaddr; }
     bool        GetTraceDebug() const { return m_bTraceDebug; }
     bool        GetAsyncEpg() const { return m_bAsyncEpg; }
     int         GetTotalTuners() const { return m_iTotalTuners; }
@@ -104,6 +106,7 @@ namespace tvheadend {
       m_strPassword(DEFAULT_PASSWORD),
       m_iConnectTimeout(DEFAULT_CONNECT_TIMEOUT),
       m_iResponseTimeout(DEFAULT_RESPONSE_TIMEOUT),
+      m_strMACaddr(DEFAULT_MAC_ADDRESS),
       m_bTraceDebug(DEFAULT_TRACE_DEBUG),
       m_bAsyncEpg(DEFAULT_ASYNC_EPG),
       m_bPretunerEnabled(DEFAULT_PRETUNER_ENABLED),
@@ -129,6 +132,7 @@ namespace tvheadend {
     void SetPassword(const std::string& value) { m_strPassword = value; }
     void SetConnectTimeout(int value) { m_iConnectTimeout = value; }
     void SetResponseTimeout(int value) { m_iResponseTimeout = value; }
+    void SetMACaddr(const std::string& value) { m_strMACaddr = value; }
     void SetTraceDebug(bool value) { m_bTraceDebug = value; }
     void SetAsyncEpg(bool value) { m_bAsyncEpg = value; }
     void SetTotalTuners(int value) { m_iTotalTuners = value; }
@@ -159,6 +163,7 @@ namespace tvheadend {
     std::string m_strPassword;
     int         m_iConnectTimeout;
     int         m_iResponseTimeout;
+    std::string m_strMACaddr;
     bool        m_bTraceDebug;
     bool        m_bAsyncEpg;
     bool        m_bPretunerEnabled;

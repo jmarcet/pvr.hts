@@ -417,9 +417,13 @@ PVR_ERROR CTvheadend::GetRecordings ( ADDON_HANDLE handle )
       /* Setup entry */
       PVR_RECORDING rec;
       memset(&rec, 0, sizeof(rec));
-
-      /* Channel icon */
-      if ((cit = m_channels.find(recording.GetChannel())) != m_channels.end())
+      
+      /* Episode image */
+      if (!recording.GetImage().empty())
+      {
+      	strncpy(rec.strIconPath, recording.GetImage().c_str(), sizeof(rec.strIconPath) - 1);
+      }
+      else if ((cit = m_channels.find(recording.GetChannel())) != m_channels.end())
       {
         strncpy(rec.strIconPath, cit->second.GetIcon().c_str(),
                 sizeof(rec.strIconPath) - 1);
@@ -441,6 +445,10 @@ PVR_ERROR CTvheadend::GetRecordings ( ADDON_HANDLE handle )
 
       /* Description */
       strncpy(rec.strPlot, recording.GetDescription().c_str(), sizeof(rec.strPlot) - 1);
+      
+      /* Genre */
+      rec.iGenreType = recording.GetGenre() & 0xF0;
+      rec.iGenreSubType = recording.GetGenre() & 0x0F;
 
       /* Time/Duration */
       rec.recordingTime = (time_t)recording.GetStart();
@@ -923,8 +931,8 @@ bool CTvheadend::CreateTimer ( const Recording &tvhTmr, PVR_TIMER &tmr )
   tmr.iEpgUid            = (tvhTmr.GetEventId() > 0) ? tvhTmr.GetEventId() : PVR_TIMER_NO_EPG_UID;
   tmr.iMarginStart       = static_cast<unsigned int>(tvhTmr.GetStartExtra());
   tmr.iMarginEnd         = static_cast<unsigned int>(tvhTmr.GetStopExtra());
-  tmr.iGenreType         = 0;                // not supported by tvh?
-  tmr.iGenreSubType      = 0;                // not supported by tvh?
+  tmr.iGenreType         = tvhTmr.GetGenre() & 0xF0;
+  tmr.iGenreSubType      = tvhTmr.GetGenre() & 0x0F;
   tmr.bFullTextEpgSearch = false;            // n/a for one-shot timers
   tmr.iParentClientIndex = tmr.iTimerType == TIMER_ONCE_CREATED_BY_TIMEREC
                             ? m_timeRecordings.GetTimerIntIdFromStringId(tvhTmr.GetTimerecId())
@@ -1221,11 +1229,11 @@ void CTvheadend::CreateEvent
   epg.endTime             = event.GetStop();
   epg.strPlotOutline      = event.GetSummary().c_str();
   epg.strPlot             = event.GetDesc().c_str();
-  epg.strOriginalTitle    = NULL; /* not supported by tvh */
-  epg.strCast             = NULL; /* not supported by tvh */
-  epg.strDirector         = NULL; /* not supported by tvh */
-  epg.strWriter           = NULL; /* not supported by tvh */
-  epg.iYear               = 0;    /* not supported by tvh */
+  epg.strOriginalTitle    = event.GetOriginalTitle().c_str();
+  epg.strCast             = event.GetCast().c_str();
+  epg.strDirector         = event.GetDirector().c_str();
+  epg.strWriter           = event.GetWriter().c_str();
+  epg.iYear               = event.GetYear();
   epg.strIMDBNumber       = NULL; /* not supported by tvh */
   epg.strIconPath         = event.GetImage().c_str();
   epg.iGenreType          = event.GetContent() & 0xF0;
@@ -1903,7 +1911,7 @@ void CTvheadend::ParseChannelDelete ( htsmsg_t *msg )
 void CTvheadend::ParseRecordingAddOrUpdate ( htsmsg_t *msg, bool bAdd )
 {
   const char *state, *str;
-  uint32_t id, channel, eventId, retention, removal, priority, enabled;
+  uint32_t id, channel, eventId, retention, removal, priority, enabled, episodeGenre;
   int64_t start, stop, startExtra, stopExtra;
 
   /* Channels must be complete */
@@ -2096,6 +2104,10 @@ void CTvheadend::ParseRecordingAddOrUpdate ( htsmsg_t *msg, bool bAdd )
     rec.SetTimerecId(str);
   if ((str = htsmsg_get_str(msg, "autorecId")) != NULL)
     rec.SetAutorecId(str);
+  if ((str = htsmsg_get_str(msg, "image")) != NULL)
+    rec.SetImage(str);
+  if (!htsmsg_get_u32(msg, "genre", &episodeGenre))
+    rec.SetGenre(episodeGenre);
 
   /* Error */
   if ((str = htsmsg_get_str(msg, "error")) != NULL)
@@ -2208,6 +2220,16 @@ bool CTvheadend::ParseEvent ( htsmsg_t *msg, bool bAdd, Event &evt )
     evt.SetDesc(str);
   if ((str = htsmsg_get_str(msg, "image")) != NULL)
     evt.SetImage(str);
+  if ((str = htsmsg_get_str(msg, "cast")) != NULL)
+    evt.SetCast(str);
+  if ((str = htsmsg_get_str(msg, "director")) != NULL)
+    evt.SetDirector(str);
+  if ((str = htsmsg_get_str(msg, "writer")) != NULL)
+    evt.SetWriter(str);
+  if ((str = htsmsg_get_str(msg, "originalTitle")) != NULL)
+    evt.SetOriginalTitle(str);
+  if (!htsmsg_get_u32(msg, "year", &u32))
+    evt.SetYear(u32);
   if (!htsmsg_get_u32(msg, "nextEventId", &u32))
     evt.SetNext(u32);
   if (!htsmsg_get_u32(msg, "contentType", &u32))

@@ -30,6 +30,7 @@ extern "C" {
 
 #include "tvheadend/utilities/Logger.h"
 #include "Tvheadend.h"
+#include "client.h"
 
 using namespace std;
 using namespace ADDON;
@@ -638,6 +639,16 @@ void* CHTSPConnection::Process ( void )
         Sleep(FAST_RECONNECT_INTERVAL);
       else
         Sleep(timeout);
+        
+      /* Try Wake On LAN */
+      std::string mac_addr = settings.GetMACaddr();
+      if (!mac_addr.empty())
+      {
+        Logger::Log(LogLevel::LEVEL_ERROR, "trying wake on lan...");
+        std::string wol_msg = XBMC->GetLocalizedString(30022);
+        XBMC->QueueNotification(QUEUE_INFO, wol_msg.c_str());
+        XBMC->WakeOnLan(mac_addr.c_str());
+      }
 
       continue;
     }
