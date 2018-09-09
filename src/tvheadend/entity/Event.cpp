@@ -28,20 +28,20 @@ using namespace tvheadend::entity;
 
 void Event::SetWriters(const std::vector<std::string> &writers)
 {
-  m_writers = StringUtils::Join(writers, EPG_STRING_TOKEN_SEPARATOR);
+  m_writers = StringUtils::Join(writers, ", ");
 }
 
 void Event::SetDirectors(const std::vector<std::string> &directors)
 {
-  m_directors = StringUtils::Join(directors, EPG_STRING_TOKEN_SEPARATOR);
+  m_directors = StringUtils::Join(directors, ", ");
 }
 
 void Event::SetCast(const std::vector<std::string> &cast)
 {
-  m_cast = StringUtils::Join(cast, EPG_STRING_TOKEN_SEPARATOR);
+  m_cast = StringUtils::Join(cast, ", ");
 }
 
 void Event::SetCategories(const std::vector<std::string> &categories)
 {
-  m_categories = StringUtils::Join(categories, EPG_STRING_TOKEN_SEPARATOR);
+  m_categories = StringUtils::Join(categories, ", ");
 }
