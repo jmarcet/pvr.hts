@@ -429,14 +429,8 @@ PVR_ERROR CTvheadend::GetRecordings ( ADDON_HANDLE handle )
       /* Setup entry */
       PVR_RECORDING rec = { 0 };
 
-      /* Episode image */
-      if (!recording.GetImage().empty())
-      {
-      	strncpy(rec.strIconPath, recording.GetImage().c_str(),
-      	        sizeof(rec.strIconPath) - 1);
-      }
       /* Channel icon */
-      else if ((cit = m_channels.find(recording.GetChannel())) != m_channels.end())
+      if ((cit = m_channels.find(recording.GetChannel())) != m_channels.end())
       {
         strncpy(rec.strIconPath, cit->second.GetIcon().c_str(),
                 sizeof(rec.strIconPath) - 1);
